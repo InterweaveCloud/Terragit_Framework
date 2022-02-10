@@ -1,0 +1,15 @@
+terraform {
+  backend "s3" {
+    bucket     = "XXX"
+    key        = "XXX"
+    region     = "XXX"
+    encrypt    = XXX
+    kms_key_id = "XXX"
+    profile    = "XXX"
+  }
+}
+
+provider "aws" {
+  region  = "XXX"
+  profile = "XXX"
+}
