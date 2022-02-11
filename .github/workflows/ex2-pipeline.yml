@@ -10,7 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set Branch name environment variable
-        id: branch_name
+        id: set_branch_name
         run: |
           echo "TF_VAR_BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
-      - run: echo "${{ env.TF_VAR_BRANCH_NAME }}"
+      - name: Print out the branch name
+        id: print_branch_name
+        run: |
+          echo "${{ env.TF_VAR_BRANCH_NAME }}" # This will output the output branch'
