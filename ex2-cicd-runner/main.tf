@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "TestBucket" {
-  bucket = "my-tf-test-bucket-uyhgyhgjhghuygu"
+  bucket = "my-tf-test-bucket-uyhgyhgjhghuygugjhfgjhf"
   acl    = "private"
 
   # Add Server Side Encryption
