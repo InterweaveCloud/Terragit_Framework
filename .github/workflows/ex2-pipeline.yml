@@ -16,7 +16,9 @@ jobs:
       - name: Print out the branch name
         id: print_export_branch_name
         run: |
-          echo "${{ BRANCH_NAME2 }}" # This will output the output branch'
+          echo "test" 
+
+
       - name: Set Branch name environment variable
         id: set_branch_name
         run: |
