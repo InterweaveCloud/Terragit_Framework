@@ -16,7 +16,7 @@ jobs:
       - name: Print out the branch name
         id: print_export_branch_name
         run: |
-          echo "test" 
+          printenv 
 
 
       - name: Set Branch name environment variable
