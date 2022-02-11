@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Use export command to set env variable
-        id: set_branch_name
+        id: export_branch_name
         run: |
           echo "export BRANCH_NAME=test" 
       - name: Set Branch name environment variable
