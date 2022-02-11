@@ -7,7 +7,6 @@ jobs:
     defaults:
       run:
         working-directory: ex2-cicd-runner
-    env:
     steps:
       - uses: actions/checkout@v2
       - run: echo "::set-env name=TF_VAR_BRANCH_NAME::${{ github.head_ref }}"
