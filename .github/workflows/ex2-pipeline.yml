@@ -13,3 +13,4 @@ jobs:
         id: branch_name
         run: |
           echo "TF_VAR_BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
+      - run: echo $TF_VAR_BRANCH_NAME
