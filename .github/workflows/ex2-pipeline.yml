@@ -9,6 +9,11 @@ jobs:
         working-directory: ex2-cicd-runner
     steps:
       - uses: actions/checkout@v2
+      - name: Use export command to set env variable
+        id: set_branch_name
+        run: |
+          echo "export BRANCH_NAME=test" |
+          echo $BRANCH_NAME
       - name: Set Branch name environment variable
         id: set_branch_name
         run: |
