@@ -12,11 +12,11 @@ jobs:
       - name: Use export command to set env variable
         id: export_branch_name
         run: |
-          echo "export BRANCH_NAME=test" 
+          echo "export BRANCH_NAME2=test" 
       - name: Print out the branch name
         id: print_export_branch_name
         run: |
-          echo "${{ BRANCH_NAME }}" # This will output the output branch'
+          echo "${{ BRANCH_NAME2 }}" # This will output the output branch'
       - name: Set Branch name environment variable
         id: set_branch_name
         run: |
