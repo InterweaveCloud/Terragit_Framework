@@ -13,7 +13,7 @@ jobs:
         id: export_branch_name
         run: |
           echo "export BRANCH_NAME=test" 
-          echo "${{ BRANCH_NAME }}"
+      - run: echo "${{ BRANCH_NAME }}"
       - name: Set Branch name environment variable
         id: set_branch_name
         run: |
