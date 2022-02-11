@@ -13,10 +13,6 @@ jobs:
         id: export_branch_name
         run: |
           echo "export BRANCH_NAME2=test" 
-      - name: Print out the branch name
-        id: print_export_branch_name
-        run: |
-          printenv 
 
 
       - name: Set Branch name environment variable
@@ -27,3 +23,9 @@ jobs:
         id: print_branch_name
         run: |
           echo "${{ env.TF_VAR_BRANCH_NAME }}" # This will output the output branch'
+
+      - name: Print out the branch name
+        id: print_export_branch_name
+        run: |
+          printenv 
+
