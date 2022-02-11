@@ -12,7 +12,8 @@ jobs:
       - name: Use export command to set env variable
         id: export_branch_name
         run: |
-          echo "export BRANCH_NAME=test" 
+          echo "export BRANCH_NAME=test" |
+          echo $BRANCH_NAME
       - name: Set Branch name environment variable
         id: set_branch_name
         run: |
