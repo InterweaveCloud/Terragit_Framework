@@ -12,7 +12,7 @@ jobs:
       - name: Set Branch name environment variable
         id: set_branch_name
         run: |
-          echo "TF_VAR_BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
+          echo "TF_VAR_BRANCH_NAME=test" >> $GITHUB_ENV
       - name: Print out the branch name
         id: print_branch_name
         run: |
