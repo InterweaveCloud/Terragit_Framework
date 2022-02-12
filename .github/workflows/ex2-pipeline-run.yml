@@ -21,7 +21,7 @@ jobs:
       - run: echo $AWS_REGION
       - run: echo $AWS_ACCESS_KEY_ID
       - run: echo $AWS_SECRET_ACCESS_KEY
-      - run: generate-backend-tf.sh
+      - run: ./generate-backend-tf.sh
       # - name: Terraform Init
       #   run: terraform init
       # - name: Terraform Apply
