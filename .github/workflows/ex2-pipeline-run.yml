@@ -13,6 +13,7 @@ jobs:
       AWS_REGION: 'eu-west-2'
     steps:
       - uses: actions/checkout@v2
+      - run: echo $AWS_REGION
 
 
 
