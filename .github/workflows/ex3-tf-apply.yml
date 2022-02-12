@@ -27,6 +27,7 @@ jobs:
       - run: echo $AWS_REGION
       - run: echo $AWS_ACCESS_KEY_ID
       - run: echo $AWS_SECRET_ACCESS_KEY
+      - run: echo $TF_VAR_branch
       - run: ./support_scripts/generate-backend-tf.sh
       - run: cat backend.tf
 
