@@ -1,0 +1,41 @@
+name: Terraform ex2 Plan
+on:   
+  pull_request:
+    branches:
+      - 'ex2-main'
+jobs:
+  create-infra:
+    name: Terraform   Plan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ex2-cicd-feature-branch
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: 'eu-west-2'
+      S3_BACKEND_BUCKET: ${{ secrets.S3_BACKEND_BUCKET }}
+      S3_BACKEND_KMS_KEY_ID: ${{ secrets.S3_BACKEND_KMS_KEY_ID }}
+
+
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: chmod -R 700 ./
+      - run: echo $AWS_REGION
+      - run: echo $AWS_ACCESS_KEY_ID
+      - run: echo $AWS_SECRET_ACCESS_KEY
+      - run: ./support_scripts/generate-backend-tf.sh
+      - run: cat backend.tf
+
+      
+      - name: Terraform Init
+        run: terraform init
+      - name: Terraform Plan
+        run: terraform plan
+
+
+
+
+
+

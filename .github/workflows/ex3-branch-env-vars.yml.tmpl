@@ -1,0 +1,35 @@
+name: Terraform ex2
+on: [push]
+jobs:
+  create-infra:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ex2-cicd-runner
+    env:
+      Branch_Test: "test"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use export command to set env variable
+        id: export_branch_name
+        run: |
+          export BRANCH_NAME2=test
+
+
+      - name: Set Branch name environment variable
+        id: set_branch_name
+        run: |
+          echo "TF_VAR_BRANCH_NAME=test" >> $GITHUB_ENV
+      - name: Print out the branch name
+        id: print_branch_name
+        run: |
+          echo "${{ env.TF_VAR_BRANCH_NAME }}" # This will output the output branch'
+
+      - run: echo "::set-env name=BRANCH_NAME3::${{ github.head_ref }}"
+
+      - name: Print out the branch name
+        id: print_export_branch_name
+        run: |
+          printenv 
+
