@@ -12,7 +12,7 @@ jobs:
       - name: Use export command to set env variable
         id: export_branch_name
         run: |
-          export BRANCH_NAME2="${{ github.head_ref }}"
+          export BRANCH_NAME2=test
 
 
       - name: Set Branch name environment variable
