@@ -2,7 +2,7 @@ name: Terraform Ex3 Apply
 on:   
   push:
     branches:
-      - ex3-main
+      - 'ex3**'
 jobs:
   create-infra:
     name: Terraform Apply
