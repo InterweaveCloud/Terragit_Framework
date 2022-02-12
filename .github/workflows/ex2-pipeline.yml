@@ -26,6 +26,8 @@ jobs:
         run: |
           echo "${{ env.TF_VAR_BRANCH_NAME }}" # This will output the output branch'
 
+      - run: echo "::set-env name=BRANCH_NAME3::${{ github.head_ref }}"
+
       - name: Print out the branch name
         id: print_export_branch_name
         run: |
