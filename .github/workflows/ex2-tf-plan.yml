@@ -1,4 +1,4 @@
-name: Terraform ex2
+name: Terraform ex2 Plan
 on:   
   push:
     branches:
