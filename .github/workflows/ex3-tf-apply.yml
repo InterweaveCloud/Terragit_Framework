@@ -16,7 +16,7 @@ jobs:
       AWS_REGION: 'eu-west-2'
       S3_BACKEND_BUCKET: ${{ secrets.S3_BACKEND_BUCKET }}
       S3_BACKEND_KMS_KEY_ID: ${{ secrets.S3_BACKEND_KMS_KEY_ID }}
-      TF_VAR_branch: ${{ github.head_ref }}
+      # TF_VAR_branch: ${{ github.head_ref }}
 
 
 
@@ -27,7 +27,20 @@ jobs:
       - run: echo $AWS_REGION
       - run: echo $AWS_ACCESS_KEY_ID
       - run: echo $AWS_SECRET_ACCESS_KEY
-      - run: echo $TF_VAR_branch
+
+
+      - name: et Extra environment variables
+        run: |
+          echo "TF_VAR_branch=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+      - name: Echo environment variables
+        run: |
+          echo $AWS_REGION
+          echo $AWS_ACCESS_KEY_ID
+          echo $AWS_SECRET_ACCESS_KEY
+          echo "TF_VAR_branch=${TF_VAR_branch}"
+
+
       - run: ./support_scripts/generate-backend-tf.sh
       - run: cat backend.tf
 
