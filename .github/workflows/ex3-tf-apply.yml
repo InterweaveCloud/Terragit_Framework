@@ -29,16 +29,17 @@ jobs:
       - run: echo $AWS_SECRET_ACCESS_KEY
 
 
-      - name: et Extra environment variables
+      - name: Get Extra environment variables
         run: |
           echo "TF_VAR_branch=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Echo environment variables
         run: |
-          echo $AWS_REGION
-          echo $AWS_ACCESS_KEY_ID
-          echo $AWS_SECRET_ACCESS_KEY
-          echo "TF_VAR_branch=${TF_VAR_branch}"
+          echo "AWS_REGION is ${AWS_REGION}"
+          echo "AWS_ACCESS_KEY_ID is ${AWS_ACCESS_KEY_ID}"
+          echo "AWS_SECRET_ACCESS_KEY is ${AWS_SECRET_ACCESS_KEY}"
+          echo "TF_VAR_branch is ${TF_VAR_branch}"
+
 
 
       - run: ./support_scripts/generate-backend-tf.sh
