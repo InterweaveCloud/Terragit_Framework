@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "TestBucket" {
-  bucket = "${var.branch}-my-tf-test-bucket-uyhgyhgjhghuygugjhfgjhf"
+  bucket = replace("${var.branch}-my-tf-test-bucket-uyhgyhgjhghuygugjhfgjhf2", "_", "-")
   acl    = "private"
 
   tags = {
