@@ -1,11 +1,11 @@
-name: Terraform ex2
+name: Terraform ex2 Plan
 on:   
   push:
     branches:
       - 'ex2-main/**'
 jobs:
   create-infra:
-    name: Terraform Apply
+    name: Terraform   Plan
     runs-on: ubuntu-latest
     defaults:
       run:

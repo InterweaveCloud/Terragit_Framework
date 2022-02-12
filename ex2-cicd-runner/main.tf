@@ -46,3 +46,18 @@ resource "aws_kms_key" "mykey" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
 }
+
+resource "aws_s3_bucket" "TestBucket2" {
+  bucket = "my-tf-test-bucket-uyhgyhgjhghuygugjhfgjhf2"
+  acl    = "private"
+
+  tags = {
+    Name        = "My bucket"
+    Environment = "Dev"
+  }
+
+  versioning {
+    enabled = true
+  }
+
+}
