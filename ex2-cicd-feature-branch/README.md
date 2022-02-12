@@ -17,9 +17,17 @@ After this add two different blocks of code feature 1 and feature 2. S3 buckets 
 
 Push both up and see the plans - each one only plans to create its own infrastructure.
 
-Create a pull request from ex2-main/feature1 into the ex2-main branch and merge it. You will see in github actions that the terraform apply is executed.
+Create a pull request from ex2-main/feature1 into the ex2-main branch and watch the cicd which executes upon merge. it will be the same as the one done initially.
 
-Execute the ex2-main/feature2 workflow again and you will see the feature2 code being added but also the feature2 resources are being planned to be deleted. Merge this into the ex2-main branch through a pull request, and you will see in github actions that the terraform apply is executed however the feature3 resources are not being deleted. This destroy is just noise due to the feature 2 branch being stale compared to ex2-main. Due to this the following workflow is recommended to reduce noise (for feature 2):
+once you merge it. You will see in github actions that the terraform apply is executed.
+
+Execute the ex2-main/feature2 workflow again and you will see the feature2 code being added but also the feature1 resources are being planned to be deleted.
+
+Create a pull request and observe the merge when the pull request cicd is run. Notice how the code in feature1 are not being planned to be deleted anymore, this plan is more accurate and does not contain the same noise.
+
+Approve the pull request, and you will see in github actions that the terraform apply is executed however the feature1 resources are not being deleted.
+
+The planned destroy was just noise due to the feature 2 branch being stale compared to ex2-main. This can be avoided by keeping the feature branch up to date with the trunk branch. Due to this the following workflow is recommended to reduce noise (for feature 2):
 
 git checkout ex2-main
 git pull origin ex2-main
