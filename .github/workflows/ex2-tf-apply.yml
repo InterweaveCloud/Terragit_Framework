@@ -2,7 +2,7 @@ name: Terraform ex2 Apply
 on:   
   push:
     branches:
-      - ex2-main-branch
+      - ex2-main
 jobs:
   create-infra:
     name: Terraform Apply
