@@ -47,17 +47,3 @@ resource "aws_kms_key" "mykey" {
   deletion_window_in_days = 10
 }
 
-resource "aws_s3_bucket" "TestBucket2" {
-  bucket = "my-tf-test-bucket-uyhgyhgjhghuygugjhfgjhf2"
-  acl    = "private"
-
-  tags = {
-    Name        = "My bucket"
-    Environment = "Dev"
-  }
-
-  versioning {
-    enabled = true
-  }
-
-}
