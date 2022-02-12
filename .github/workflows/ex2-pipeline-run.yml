@@ -16,6 +16,8 @@ jobs:
       - run: echo $AWS_REGION
       - run: echo $AWS_ACCESS_KEY_ID
       - run: echo $AWS_SECRET_ACCESS_KEY
+      - run: echo "test2"
+
       # - name: Terraform Init
       #   run: terraform init
       # - name: Terraform Apply
