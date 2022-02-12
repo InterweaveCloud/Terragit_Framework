@@ -2,7 +2,7 @@ name: Terraform ex2 Plan
 on:   
   push:
     branches:
-      - 'ex2-main/**'
+      - 'ex2-main-**'
 jobs:
   create-infra:
     name: Terraform   Plan
