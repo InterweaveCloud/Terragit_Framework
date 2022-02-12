@@ -30,8 +30,8 @@ jobs:
         run: terraform init
       - name: Terraform Apply
         run: terraform apply -auto-approve
-      # - name: Terraform Output
-      #   run: terraform output -json > outputs.json
+      - name: Terraform Output
+        run: terraform output -json > outputs.json
       # - name: Jenkins Step
       #   run: echo "Jenkins Step"
       # - name: GitHub Step
