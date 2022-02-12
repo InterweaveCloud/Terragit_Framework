@@ -23,6 +23,9 @@ jobs:
       - run: echo $AWS_ACCESS_KEY_ID
       - run: echo $AWS_SECRET_ACCESS_KEY
       - run: ./support_scripts/generate-backend-tf.sh
+      - run: cat backend.tf
+
+      
       # - name: Terraform Init
       #   run: terraform init
       # - name: Terraform Apply
