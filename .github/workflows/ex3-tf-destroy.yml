@@ -29,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: chmod -R 700 ./
-      - run: echo "TF_VAR_branch=${github.event.ref}" >> $GITHUB_ENV
+      - run: echo "TF_VAR_branch=${{ github.event.ref }}" >> $GITHUB_ENV
       # - name: Get Extra environment variables
       #   run: |
       #     echo "TF_VAR_branch=${GITHUB_REF##*/}" >> $GITHUB_ENV
