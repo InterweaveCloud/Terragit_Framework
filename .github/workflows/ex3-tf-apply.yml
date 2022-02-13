@@ -23,8 +23,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - run: printenv
       - run: chmod -R 700 ./
+
+      - run: printenv
+      - run: . ./set-branch-env-var.sh
+      - run: echo "test352 is ${test352} in main shell"
       - run: echo $AWS_REGION
       - run: echo $AWS_ACCESS_KEY_ID
       - run: echo $AWS_SECRET_ACCESS_KEY
