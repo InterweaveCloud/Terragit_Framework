@@ -17,7 +17,7 @@ jobs:
           cat /home/runner/work/_temp/_github_workflow/event.json
 
   destroy-infra:
-    if: startsWith(github.event.ref, "ex3" )
+    if: startsWith( "${{ github.event.ref }}", "ex3" )
     name: Terraform Destroy
     runs-on: ubuntu-latest
     defaults:
