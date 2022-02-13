@@ -1,0 +1,63 @@
+name: Terraform Ex3 Apply
+on:   
+  push:
+    branches:
+      - 'ex3**'
+jobs:
+  create-infra:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ex3-cicd-feature-env
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: 'eu-west-2'
+      S3_BACKEND_BUCKET: ${{ secrets.S3_BACKEND_BUCKET }}
+      S3_BACKEND_KMS_KEY_ID: ${{ secrets.S3_BACKEND_KMS_KEY_ID }}
+      # TF_VAR_branch: ${{ github.head_ref }}
+
+
+
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: chmod -R 700 ./
+
+      - run: printenv
+      - run: . ./support_scripts/set-branch-env-var.sh
+      - run: echo "test352 is ${test352} in main shell"
+      - run: echo $AWS_REGION
+      - run: echo $AWS_ACCESS_KEY_ID
+      - run: echo $AWS_SECRET_ACCESS_KEY
+
+
+      # - name: Get Extra environment variables
+      #   run: |
+      #     echo "TF_VAR_branch=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+      - name: Echo environment variables
+        run: |
+          echo "AWS_REGION is ${AWS_REGION}"
+          echo "AWS_ACCESS_KEY_ID is ${AWS_ACCESS_KEY_ID}"
+          echo "AWS_SECRET_ACCESS_KEY is ${AWS_SECRET_ACCESS_KEY}"
+          echo "TF_VAR_branch is ${TF_VAR_branch}"
+
+
+
+      - run: ./support_scripts/generate-backend-tf.sh
+      - run: cat backend.tf
+
+      
+      - name: Terraform Init
+        run: terraform init
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+      - name: Terraform Output
+        run: terraform output -json > outputs.json
+
+
+
+
+
