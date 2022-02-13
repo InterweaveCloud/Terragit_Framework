@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - run: $ex3 && echo "branch starts with ex3" || echo "branch does not start with ex3"
+      - run: ${{ startsWith('Hello world', 'He') }} && echo "branch starts with ex3" || echo "branch does not start with ex3"
       - run: chmod -R 700 ./
       - run: echo "TF_VAR_branch=${{ github.event.ref }}" >> $GITHUB_ENV
       # - name: Get Extra environment variables
@@ -53,5 +53,5 @@ jobs:
       - name: Terraform Init
         run: terraform init
       - name: Terraform Destroy
-        if: ${{ startsWith('Hello world', 'He') }}
+        if: 
         run: terraform destroy -auto-approve
