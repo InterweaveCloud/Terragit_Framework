@@ -33,9 +33,9 @@ jobs:
       - run: echo $AWS_SECRET_ACCESS_KEY
 
 
-      - name: Get Extra environment variables
-        run: |
-          echo "TF_VAR_branch=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      # - name: Get Extra environment variables
+      #   run: |
+      #     echo "TF_VAR_branch=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Echo environment variables
         run: |
