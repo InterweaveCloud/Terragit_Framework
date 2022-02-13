@@ -9,3 +9,4 @@ jobs:
         run: |
           echo "Clean up for branch ${{ github.event.ref }}"
           printenv
+          cat /home/runner/work/_temp/_github_workflow/event.json
