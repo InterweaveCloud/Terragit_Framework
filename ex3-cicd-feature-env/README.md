@@ -21,4 +21,8 @@ These separated environments are isolated failure domains and allow for git to b
 
 Additionally, notice how the s3 bucket name removes the \_ character to replace with a -, this sanitises the branch name so that it can be used within a bucket name. This is an additional consideration and may affect the naming convention.
 
-When creating the
+When creating the pull requests, notice how the workflow will execute a terraform plan on the target branch. This is to communicate what would actually happen if merged in - this being used to approve or reject the merge request.
+
+When merging the pull request, the workflow will execute a terraform apply on the target branch. This is to actually perform the changes to the infrastructure.
+
+Finally, when the pull request is approved, the workflow will execute a terraform destroy on the target branch. This is to clean up the infrastructure.
