@@ -23,6 +23,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - run: printenv
       - run: chmod -R 700 ./
       - run: echo $AWS_REGION
       - run: echo $AWS_ACCESS_KEY_ID

@@ -20,3 +20,5 @@ Push both branches to the remote repo and notice how three different sets of inf
 These separated environments are isolated failure domains and allow for git to be used as traditionally.
 
 Additionally, notice how the s3 bucket name removes the \_ character to replace with a -, this sanitises the branch name so that it can be used within a bucket name. This is an additional consideration and may affect the naming convention.
+
+When creating the
