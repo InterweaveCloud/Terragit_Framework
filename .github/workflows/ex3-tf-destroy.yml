@@ -29,7 +29,7 @@ jobs:
       AWS_REGION: 'eu-west-2'
       S3_BACKEND_BUCKET: ${{ secrets.S3_BACKEND_BUCKET }}
       S3_BACKEND_KMS_KEY_ID: ${{ secrets.S3_BACKEND_KMS_KEY_ID }}
-      ex3: startsWith( "${{ github.event.ref }}", "ex3" )
+      ex3: ${{ startsWith( "${{ github.event.ref }}", "ex3" ) }}
 
     steps:
       - uses: actions/checkout@v2
@@ -45,7 +45,7 @@ jobs:
           echo "AWS_REGION is ${AWS_REGION}"
           echo "AWS_ACCESS_KEY_ID is ${AWS_ACCESS_KEY_ID}"
           echo "AWS_SECRET_ACCESS_KEY is ${AWS_SECRET_ACCESS_KEY}"
-          echo "TF_VAR_branch is ${TF_VAR_branch}"  
+          echo "TF_VAR_branch2 is ${TF_VAR_branch}"  
 
       - run: ./support_scripts/generate-backend-tf.sh
       - run: cat backend.tf
