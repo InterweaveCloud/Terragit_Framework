@@ -7,34 +7,22 @@ First in the github actions secrets create the following secrets called:
     S3_BACKEND_BUCKET
     S3_BACKEND_KMS_KEY_ID
 
-Looking at ex2-tf-apply you can see that this only occurs on a branch called ex2-main while ex2-tf-plan only executes on branch which start with ex2-main/ . This assumes the naming convention for branches is trunk/feature .
+Here a new environment will be created per feature branch.
 
-Create a new branch called ex2-main and push it to github. You will see in github actions that the infrastructure is created.
+create a branch called ex3-main and push to main to see how the infrastructure is created.
 
-Following this, create two new branches called ex2-main/feature1 and ex2-main/feature2 and push them to github. You will see in github actions that the terraform plan is executed.
+Notice how certain variables like the s3 bucket name include the var.branch variable to ensure that namespaces are unique.
 
-After this add two different blocks of code feature 1 and feature 2. S3 buckets are low cost fast resources to create.
+Create two new branches called ex3-main-feature2 and ex3-main-feature1 and add infra to each.
 
-Push both up and see the plans - each one only plans to create its own infrastructure.
+Push both branches to the remote repo and notice how three different sets of infrastructure is created. Also how feature 1 only exists in the feature 1 env and feature 2 in the feature 2 env with no overlap.
 
-Create a pull request from ex2-main/feature1 into the ex2-main branch and watch the cicd which executes upon merge. it will be the same as the one done initially.
+These separated environments are isolated failure domains and allow for git to be used as traditionally.
 
-once you merge it. You will see in github actions that the terraform apply is executed.
+Additionally, notice how the s3 bucket name removes the \_ character to replace with a -, this sanitises the branch name so that it can be used within a bucket name. This is an additional consideration and may affect the naming convention.
 
-Execute the ex2-main/feature2 workflow again and you will see the feature2 code being added but also the feature1 resources are being planned to be deleted.
+When creating the pull requests, notice how the workflow will execute a terraform plan on the target branch. This is to communicate what would actually happen if merged in - this being used to approve or reject the merge request.
 
-Create a pull request and observe the merge when the pull request cicd is run. Notice how the code in feature1 are not being planned to be deleted anymore, this plan is more accurate and does not contain the same noise.
+When merging the pull request, the workflow will execute a terraform apply on the target branch. This is to actually perform the changes to the infrastructure.
 
-Approve the pull request, and you will see in github actions that the terraform apply is executed however the feature1 resources are not being deleted.
-
-The planned destroy was just noise due to the feature 2 branch being stale compared to ex2-main. This can be avoided by keeping the feature branch up to date with the trunk branch. Due to this the following workflow is recommended to reduce noise (for feature 2):
-
-git checkout ex2-main
-git pull origin ex2-main
-git checkout ex2-main/feature2
-git merge ex2-main
-git push origin ex2-main/feature2
-
-It is recommended this is scripted for consistency.
-
-Repeat the above steps but before pushing feature 2, utilise the above workflow and you will see the noise is reduced.
+Finally, when the pull request is approved, the workflow will execute a terraform destroy on the target branch. This is to clean up the infrastructure.

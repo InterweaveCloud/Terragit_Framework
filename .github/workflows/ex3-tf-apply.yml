@@ -24,14 +24,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: chmod -R 700 ./
+
+      - run: printenv
+      - run: . ./support_scripts/set-branch-env-var.sh
+      - run: echo "test352 is ${test352} in main shell"
       - run: echo $AWS_REGION
       - run: echo $AWS_ACCESS_KEY_ID
       - run: echo $AWS_SECRET_ACCESS_KEY
 
 
-      - name: Get Extra environment variables
-        run: |
-          echo "TF_VAR_branch=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      # - name: Get Extra environment variables
+      #   run: |
+      #     echo "TF_VAR_branch=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Echo environment variables
         run: |
