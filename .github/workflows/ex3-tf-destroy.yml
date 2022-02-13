@@ -1,5 +1,8 @@
 name: Terraform Destroy on Branch Deletion
-on: delete
+on: 
+  delete:
+    branches:
+      - 'ex3**'
 jobs:
   delete:
     if: github.event.ref_type == 'branch'
@@ -14,7 +17,7 @@ jobs:
           cat /home/runner/work/_temp/_github_workflow/event.json
 
   destroy-infra:
-    name: Terraform Apply
+    name: Terraform Destroy
     runs-on: ubuntu-latest
     defaults:
       run:
