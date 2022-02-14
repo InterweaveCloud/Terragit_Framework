@@ -12,10 +12,3 @@ resource "aws_s3_bucket" "TestBucket" {
   }
 
 }
-
-
-# Create a KMS key for the S3 bucket
-resource "aws_kms_key" "mykey" {
-  description             = "This key is used to encrypt bucket objects"
-  deletion_window_in_days = 10
-}
