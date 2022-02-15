@@ -53,5 +53,4 @@ jobs:
       - name: Terraform Init
         run: terraform init
       - name: Terraform Destroy
-        if: 
         run: terraform destroy -auto-approve
