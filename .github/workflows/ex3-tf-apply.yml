@@ -68,12 +68,14 @@ jobs:
         id: terraform-validate
         run: terraform validate -no-color
 
-        # Section for Terraform commands on a push event
 
+      # Plan occurs on both push and pull requests
       - name: Terraform Plan on push event
         if: github.event_name == 'push' || github.event_name == 'pull_request'
         id: terraform-plan
         run: terraform plan -input=false -out=tfplan -no-color
+
+      # Applies do not occur on pull requests since only a plan is required for approval
 
       - name: Terraform Apply on push event
         if: github.event_name == 'push'
@@ -88,15 +90,9 @@ jobs:
           terraform output -json > outputs.json
           cat outputs.json
       
-        # Section for Terraform commands on a pull event
-
-      - name: Terraform Plan on pull request event
-        id: terraform-plan-pull
-        if: github.event_name == 'pull_request'
-        run: terraform plan -no-color -input=false
-        continue-on-error: true 
-
-      - uses: actions/github-script@0.9.0
+    
+      - name: Post plan outputs back to PR for easier approval
+        uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
         env:
           PLAN: "terraform\n${{ steps.terraform-plan.outputs.stdout }}"
