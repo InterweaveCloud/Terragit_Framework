@@ -40,8 +40,10 @@ jobs:
 
 
 
-      - run: ./support_scripts/generate-backend-tf.sh
-      - run: cat backend.tf
+      - name: Execute generate backend.tf
+        run: |
+          ./support_scripts/generate-backend-tf.sh
+          cat backend.tf
 
       
       - name: Terraform Init
