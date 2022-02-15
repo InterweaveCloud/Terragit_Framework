@@ -16,7 +16,6 @@ jobs:
       AWS_REGION: 'eu-west-2'
       S3_BACKEND_BUCKET: ${{ secrets.S3_BACKEND_BUCKET }}
       S3_BACKEND_KMS_KEY_ID: ${{ secrets.S3_BACKEND_KMS_KEY_ID }}
-      # TF_VAR_branch: ${{ github.head_ref }}
 
 
 
@@ -27,12 +26,10 @@ jobs:
 
       - run: printenv
       - run: . ./support_scripts/set-branch-env-var.sh
-      
-      - name: Echo environment variables
+
+      - name: Set branch environment variable
         run: |
-          echo "AWS_REGION is ${AWS_REGION}"
-          echo "AWS_ACCESS_KEY_ID is ${AWS_ACCESS_KEY_ID}"
-          echo "AWS_SECRET_ACCESS_KEY is ${AWS_SECRET_ACCESS_KEY}"
+          . ./support_scripts/set-branch-env-var.sh
           echo "TF_VAR_branch is ${TF_VAR_branch}"
 
 
