@@ -1,6 +1,8 @@
 # Contents of backend.tf file restricted as they may be sensitive
 *backend.tf
 
+*tfbackend
+
 # Local .terraform directories
 **/.terraform/*
 
@@ -36,3 +38,4 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
