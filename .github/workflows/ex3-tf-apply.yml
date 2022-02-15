@@ -53,6 +53,10 @@ jobs:
         id: terraform-init
         run: terraform init -input=false
 
+      - name: Terraform Validate
+        id: terraform-validate
+        run: terraform validate -no-color
+
       - name: Terraform Plan
         run: terraform plan -input=false -out=tfplan
       # - name: Terraform Output
