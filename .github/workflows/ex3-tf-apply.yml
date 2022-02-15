@@ -58,7 +58,7 @@ jobs:
         run: terraform validate -no-color
 
       - name: Terraform Plan
-        run: terraform plan -input=false -out=tfplan
+        run: terraform plan -input=false -out=tfplan -no-color
       # - name: Terraform Output
       #   run: terraform output -json > outputs.json
 
