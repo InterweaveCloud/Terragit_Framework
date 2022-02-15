@@ -1,5 +1,7 @@
 #!/bin/sh
 
+github_ref="${GITHUB_REF##*/}"
+
 # If the github ref is merge, then use the base ref to get the branch
 if [ "${github_ref}" = "merge" ]; then
   echo "TF_VAR_branch=${GITHUB_BASE_REF}" >> $GITHUB_ENV
