@@ -25,7 +25,9 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
-        
+      
+      - run: terraform  --version
+
       - run: chmod -R 700 ./
 
       - run: printenv
