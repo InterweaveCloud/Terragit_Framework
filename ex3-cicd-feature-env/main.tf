@@ -9,6 +9,6 @@ resource "aws_s3_bucket" "TestBucket" {
 
   versioning {
     enabled = true
-  
+  }
 
 }
