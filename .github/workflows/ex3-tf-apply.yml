@@ -39,6 +39,9 @@ jobs:
       - name: Print Environment Variables - for debugging
         run: printenv
 
+      - name: Display event meta data- for debugging
+        run: cat /home/runner/work/_temp/_github_workflow/event.json
+
 
       - name: Set branch environment variable
         run: |
