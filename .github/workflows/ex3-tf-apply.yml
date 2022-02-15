@@ -14,8 +14,13 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: 'eu-west-2'
+
+      # Config for S3 Backend
       S3_BACKEND_BUCKET: ${{ secrets.S3_BACKEND_BUCKET }}
       S3_BACKEND_KMS_KEY_ID: ${{ secrets.S3_BACKEND_KMS_KEY_ID }}
+      S3_BACKEND_AWS_REGION: 'eu-west-2'
+      S3_BACKEND_ENCRYPT: 'true'
+
 
 
 
