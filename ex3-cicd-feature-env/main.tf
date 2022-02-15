@@ -12,3 +12,6 @@ resource "aws_s3_bucket" "TestBucket" {
   }
 
 }
+
+
+output "test_output" { value = "test_output" }

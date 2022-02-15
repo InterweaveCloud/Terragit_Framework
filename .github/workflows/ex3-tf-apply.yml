@@ -1,6 +1,9 @@
-name: Terraform Ex3 Apply
+name: Terraform Ex3
 on:   
   push:
+    branches:
+      - 'ex3**'
+  pull_request:
     branches:
       - 'ex3**'
 jobs:
@@ -14,48 +17,110 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: 'eu-west-2'
+
+      # Config for S3 Backend
       S3_BACKEND_BUCKET: ${{ secrets.S3_BACKEND_BUCKET }}
       S3_BACKEND_KMS_KEY_ID: ${{ secrets.S3_BACKEND_KMS_KEY_ID }}
-      # TF_VAR_branch: ${{ github.head_ref }}
+      S3_BACKEND_AWS_REGION: 'eu-west-2'
+      S3_BACKEND_ENCRYPT: 'true'
+
 
 
 
 
     steps:
       - uses: actions/checkout@v2
-      - run: chmod -R 700 ./
 
-      - run: printenv
-      - run: . ./support_scripts/set-branch-env-var.sh
-      - run: echo "test352 is ${test352} in main shell"
-      - run: echo $AWS_REGION
-      - run: echo $AWS_ACCESS_KEY_ID
-      - run: echo $AWS_SECRET_ACCESS_KEY
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.5
+
+      - name: Give runner permissions for all files in folder recursively
+        run: chmod -R 700 ./
+
+      - name: Print Environment Variables - for debugging
+        run: printenv
+
+      - name: Display event meta data- for debugging
+        run: cat /home/runner/work/_temp/_github_workflow/event.json
 
 
-      # - name: Get Extra environment variables
-      #   run: |
-      #     echo "TF_VAR_branch=${GITHUB_REF##*/}" >> $GITHUB_ENV
-
-      - name: Echo environment variables
+      - name: Set branch environment variable
         run: |
-          echo "AWS_REGION is ${AWS_REGION}"
-          echo "AWS_ACCESS_KEY_ID is ${AWS_ACCESS_KEY_ID}"
-          echo "AWS_SECRET_ACCESS_KEY is ${AWS_SECRET_ACCESS_KEY}"
+          . ./support_scripts/set-branch-env-var.sh
           echo "TF_VAR_branch is ${TF_VAR_branch}"
 
+      - name: Execute generate config.s3.tfbackend
+        run: |
+          ./support_scripts/generate-backend-tf.sh
+          cat config.s3.tfbackend
 
-
-      - run: ./support_scripts/generate-backend-tf.sh
-      - run: cat backend.tf
-
+      - name: Terraform Format
+        id: terraform-fmt
+        run: terraform fmt -check
       
       - name: Terraform Init
-        run: terraform init
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
-      - name: Terraform Output
-        run: terraform output -json > outputs.json
+        id: terraform-init 
+        run: terraform init -input=false -backend-config=config.s3.tfbackend
+
+      - name: Terraform Validate
+        id: terraform-validate
+        run: terraform validate -no-color
+
+
+      # Plan occurs on both push and pull requests
+      - name: Terraform Plan on push event
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        id: terraform-plan
+        run: terraform plan -input=false -out=tfplan -no-color
+
+      # Applies do not occur on pull requests since only a plan is required for approval
+
+      - name: Terraform Apply on push event
+        if: github.event_name == 'push'
+        id: terraform-apply
+        run: terraform apply -input=false tfplan
+
+
+      - name: Terraform Output on push event
+        if: github.event_name == 'push'
+        id: terraform-output
+        run: |
+          terraform output -json > outputs.json
+          cat outputs.json
+      
+    
+      - name: Post plan outputs back to PR for easier approval
+        uses: actions/github-script@0.9.0
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.terraform-plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.terraform-fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.terraform-init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.terraform-validate.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.terraform-plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+        
 
 
 
