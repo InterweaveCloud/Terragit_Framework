@@ -66,18 +66,18 @@ jobs:
         run: terraform validate -no-color
 
       - name: Terraform Plan
-        if: github.event_name == 'push'
+        if: github.event_name == 'push2'
         id: terraform-plan
         run: terraform plan -input=false -out=tfplan -no-color
 
       - name: Terraform Apply
-        if: github.event_name == 'push'
+        if: github.event_name == 'push2'
         id: terraform-apply
         run: terraform apply -input=false tfplan
 
 
       - name: Terraform Output
-        if: github.event_name == 'push'
+        if: github.event_name == 'push2'
         id: terraform-output
         run: |
           terraform output -json > outputs.json
