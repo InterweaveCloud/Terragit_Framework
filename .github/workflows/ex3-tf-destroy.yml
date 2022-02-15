@@ -1,0 +1,20 @@
+name: Terraform Destroy on Branch Deletion
+on: 
+  delete:
+    branches:
+      - 'ex3**'
+jobs:
+  delete-test:
+    if: github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clean up
+        run: |
+          echo "Clean up for branch ${{ github.event.ref }}"
+          printenv
+      - name: Show contents of event.json
+        run: |
+          cat /home/runner/work/_temp/_github_workflow/event.json
+
+      - run: printenv
+      - run: cat /home/runner/work/_temp/_github_workflow/event.json
