@@ -124,18 +124,7 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
-          
-      - name: Add comment to pull request
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '👋 Thanks for reporting!'
-            })
+        
 
 
 
