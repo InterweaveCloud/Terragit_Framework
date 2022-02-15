@@ -68,8 +68,10 @@ jobs:
         id: terraform-validate
         run: terraform validate -no-color
 
+        # Section for Terraform commands on a push event
+
       - name: Terraform Plan on push event
-        if: github.event_name == 'push'
+        if: github.event_name == 'push'  
         id: terraform-plan
         run: terraform plan -input=false -out=tfplan -no-color
 
@@ -85,6 +87,14 @@ jobs:
         run: |
           terraform output -json > outputs.json
           cat outputs.json
+      
+        # Section for Terraform commands on a pull event
+
+      - name: Terraform Plan on pull request event
+        id: terraform-plan-pull
+        if: github.event_name == 'pull_request'
+        run: terraform plan -no-color -input=false
+        continue-on-error: true 
 
 
 
