@@ -45,9 +45,14 @@ jobs:
           ./support_scripts/generate-backend-tf.sh
           cat backend.tf
 
+      - name: Terraform Format
+        id: terraform-fmt
+        run: terraform fmt -check
       
       - name: Terraform Init
+        id: terraform-init
         run: terraform init -input=false
+
       - name: Terraform Plan
         run: terraform plan -input=false -out=tfplan
       # - name: Terraform Output
