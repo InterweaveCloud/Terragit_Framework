@@ -71,7 +71,7 @@ jobs:
         # Section for Terraform commands on a push event
 
       - name: Terraform Plan on push event
-        if: github.event_name == 'push'  
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
         id: terraform-plan
         run: terraform plan -input=false -out=tfplan -no-color
 
@@ -99,14 +99,14 @@ jobs:
       - uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request'
         env:
-          PLAN: "terraform\n${{ steps.terraform-plan-pull.outputs.stdout }}"
+          PLAN: "terraform\n${{ steps.terraform-plan.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `#### Terraform Format and Style 🖌\`${{ steps.terraform-fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.terraform-init.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.terraform-validate.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.terraform-plan-pull.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.terraform-plan.outcome }}\`
 
             <details><summary>Show Plan</summary>
 
