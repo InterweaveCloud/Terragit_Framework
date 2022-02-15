@@ -71,8 +71,11 @@ jobs:
         run: terraform apply -input=false tfplan
 
 
-      # - name: Terraform Output
-      #   run: terraform output -json > outputs.json
+      - name: Terraform Output
+        id: terraform-output
+        run: |
+          terraform output -json > outputs.json
+          cat outputs.json
 
 
 
