@@ -55,8 +55,8 @@ jobs:
         run: terraform fmt -check
       
       - name: Terraform Init
-        id: terraform-init -backend-config='path=config.s3.tfbackend'
-        run: terraform init -input=false
+        id: terraform-init 
+        run: terraform init -input=false -backend-config="path=config.s3.tfbackend"
 
       - name: Terraform Validate
         id: terraform-validate
