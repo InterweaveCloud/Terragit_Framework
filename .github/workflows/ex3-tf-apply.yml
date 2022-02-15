@@ -45,17 +45,17 @@ jobs:
           . ./support_scripts/set-branch-env-var.sh
           echo "TF_VAR_branch is ${TF_VAR_branch}"
 
-      - name: Execute generate backend.tf
+      - name: Execute generate config.s3.tfbackend
         run: |
           ./support_scripts/generate-backend-tf.sh
-          cat backend.tf
+          cat config.s3.tfbackend
 
       - name: Terraform Format
         id: terraform-fmt
         run: terraform fmt -check
       
       - name: Terraform Init
-        id: terraform-init
+        id: terraform-init -backend-config="path=config.s3.tfbackend"
         run: terraform init -input=false
 
       - name: Terraform Validate
