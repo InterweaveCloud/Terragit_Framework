@@ -40,10 +40,10 @@ jobs:
       
       - name: Terraform Init
         run: terraform init
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
-      - name: Terraform Output
-        run: terraform output -json > outputs.json
+      - name: Terraform Plan
+        run: terraform plan -input=false -out=tfplan
+      # - name: Terraform Output
+      #   run: terraform output -json > outputs.json
 
 
 
