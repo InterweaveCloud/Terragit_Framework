@@ -65,6 +65,12 @@ jobs:
       - name: Terraform Plan
         id: terraform-plan
         run: terraform plan -input=false -out=tfplan -no-color
+
+      - name: Terraform Apply
+        id: terraform-apply
+        run: terraform apply -input=false tfplan
+
+
       # - name: Terraform Output
       #   run: terraform output -json > outputs.json
 
