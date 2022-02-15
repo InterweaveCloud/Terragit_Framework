@@ -1,6 +1,9 @@
-name: Terraform Ex3 Apply
+name: Terraform Ex3
 on:   
   push:
+    branches:
+      - 'ex3**'
+  pull_request:
     branches:
       - 'ex3**'
 jobs:
