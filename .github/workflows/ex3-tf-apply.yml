@@ -23,10 +23,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # - name: Setup Terraform
-      #   uses: hashicorp/setup-terraform@v1
-      
-      - run: terraform  --version
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
 
       - run: chmod -R 700 ./
 
