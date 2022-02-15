@@ -28,17 +28,17 @@ jobs:
         with:
           terraform_version: 1.1.5
 
-      - run: chmod -R 700 ./
+      - name: Give runner permissions for all files in folder recursively
+        run: chmod -R 700 ./
 
-      - run: printenv
-      - run: . ./support_scripts/set-branch-env-var.sh
+      - name: Print Environment Variables - for debugging
+        run: printenv
+
 
       - name: Set branch environment variable
         run: |
           . ./support_scripts/set-branch-env-var.sh
           echo "TF_VAR_branch is ${TF_VAR_branch}"
-
-
 
       - name: Execute generate backend.tf
         run: |
