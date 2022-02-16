@@ -24,7 +24,7 @@ jobs:
       S3_BACKEND_AWS_REGION: 'eu-west-2'
       S3_BACKEND_ENCRYPT: 'true'
 
-      delete_ex3: github.event_name == 'delete' && ${{ startsWith(github.event.ref, 'ex3') }} == true
+      delete_ex3: ${{ github.event_name == 'delete' && ${{ startsWith(github.event.ref, 'ex3') }} == true }}
 
 
 
