@@ -6,6 +6,8 @@ echo "Github Base ref is ${GITHUB_BASE_REF}"
 echo "Github ref is ${github_ref}"
 echo "github event name is ${GITHUB_EVENT_NAME}"
 echo "Github event name is ${github.ref}"
+echo "test is ${test}"
+
 
 
 
