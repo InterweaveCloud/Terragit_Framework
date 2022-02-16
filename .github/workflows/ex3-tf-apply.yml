@@ -124,7 +124,9 @@ jobs:
       - name: Terraform Destroy
         if: github.event_name == 'delete' && ${{ startsWith(github.event.ref, 'ex3') }}
         id: terraform-destroy
-        run: terraform destroy -auto-approve
+        run: |
+          echo "terraform destroy will be executed"
+          echo "event name is ${{ github.event_name }}"
 
 
 
