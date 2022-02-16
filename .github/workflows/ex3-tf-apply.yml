@@ -129,8 +129,8 @@ jobs:
         run: |
           echo "terraform destroy will be executed"
           echo "event name is ${{ github.event_name }}"
-          echo ${{ ( github.event_name == 'delete' && ${{ startsWith(github.event.ref, 'ex3') }} ) }}
-          # echo $delete_ex3
+          echo ${{ github.event_name == 'delete' && ${{ startsWith(github.event.ref, 'ex3') }} }}
+
 
 
 
