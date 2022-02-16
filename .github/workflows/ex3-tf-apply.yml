@@ -12,6 +12,7 @@ on:
 jobs:
   create-infra:
     name: Terraform Apply
+    if: startsWith(github.event.ref, 'ex3')
     runs-on: ubuntu-latest
     defaults:
       run:
