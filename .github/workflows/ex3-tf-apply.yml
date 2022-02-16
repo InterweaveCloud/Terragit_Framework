@@ -6,6 +6,9 @@ on:
   pull_request:
     branches:
       - 'ex3**'
+  delete:
+    branches:
+      - 'ex3**'
 jobs:
   create-infra:
     name: Terraform Apply
@@ -128,9 +131,6 @@ jobs:
         id: terraform-destroy
         run: |
           echo "terraform destroy will be executed"
-          echo "event name is ${{ github.event_name }}"
-          echo ${{ github.event_name == 'delete' }}
-          echo ${{ startsWith(github.event.ref, 'ex3') }} 
 
 
 
