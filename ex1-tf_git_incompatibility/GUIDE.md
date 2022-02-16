@@ -1,33 +1,61 @@
-Git and Terraform are incompatible.
+# The incompatibility of Git and Terraform
 
-This is due to that the git paradigm of an isolated environment per branch is not natively supported by Terraform.
+## Introduction
+Git and terraform are not compatible, the reason being that the git paradigm of an isolate environment per branch is not natively supported by Terraform. In this exercise, you will be following a set of step which will help identify the challenges faced and have them explained as well.
 
-This is demonstrated in the following example:
+## Setting the Scenario
+Before you begin, I would like to make you aware of the scenario that will be simulated in the steps that follow.
 
-Pre Steps:
+Yourself and a colleague are to work on features for an S3 bucket. You will be working on feature 1. which adds versioning and lifecycle rules to the S3 bucket. Your colleague will be working on feature 2, which adds server side encryption to the S3 bucket using KMS.
 
-In all three folders copy and paste Backend.tmpl into backend.tf and replace the variables with your values. You must use a remote s3 backend as this is the bare minimum to be able to collaborate with other users.
+## Step 1
+For each folder (main, feature_1 and feature_2) copy Backend.tmpl into a file called backend.tf and replace the variables with your own values.
 
-Do a terraform apply within the main folder. Notice how a simple s3 bucket has been created. Now lets imagine you and another developer have been assigned two different features.
+## Step 2
+Navigate to the main folder in terminal using the `cd` command. You can check which folder you are in using the `ls` command. Once in the main folder run the following commands in the order it is written in:
+```
+terraform init
+terraform apply
+```
 
-You have been assigned feature 1 - Add versioning and lifecycle rules to the s3 bucket.
+The commands will initialize the backend and create the S3 bucket.
 
-And another developer has been assigned feature 2 - add server side encryption to the s3 bucket using KMS.
+Note: For `terraform apply` you will be required to approve the actions
 
-Lets say you have been developing feature 1 and have added your code, do a terraform apply in feature_1 folder.
+## Step 3
+In a  new terminal, navigate to the feature_1 folder using the `cd` command. You can check which folder you are in using the `ls` command. Once in the feature_1 folder run the following command:
+```
+terraform apply
+```
 
-Notice how your code has successfully executed.
+The command will make changes and modify S3 bucket. The changes are it will add lifecycle rules and enable versioning
 
-Now say the second developer on feature_2 has added his code. Do a terraform apply in feature_2 folder.
+Note: For `terraform apply` you will be required to approve the actions
 
-Notice how his feature has successfully been implemented however it also destroyed your KMS resource and encryption settings.
+## Step 4
+In a  new terminal, navigate to the feature_2 folder using the `cd` command. You can check which folder you are in using the `ls` command. Once in the feature_2 folder run the following command:
+```
+terraform apply
+```
 
-This is because his code does not contain your feature 1 code. Because terraform is declarative, it sees these versioning features which are not in the tf file and therefore deletes these to make the infrastructure match the code.
+The command will create a KMS key and make changes and modify the S3 bucket. The changes to the S3 buckets are the lifecycle rules have been destroyed and a server side encryption has been configured.
 
-If you do another terraform apply in feature_1 folder, you will see that your versioning and lifecycle rules are back but the KMS resource and settings are gone.
+Note: For `terraform apply` you will be required to approve the actions
 
-Working on terraform using branches is a pain as each branch is no longer an isolated environment and you will often step on the toes of another developers.
+## Step 5
+Return to the terminal in which you are in feature_1. Once in the correct terminal run the following command:
+```
+terraform apply
+```
 
+The command will destroy the KMS key and make changes and modify the S3 bucket. The changes made to the S3 bucket are lifecycle rules have been added and the server side encryption has been destroyed.
+
+Note: For `terraform apply` you will be required to approve the actions
+
+## Explanation
+As you saw, when you applied feature_1 and then applied feature_2, the changes made by feature_1 would be removed. The same would happen the other way round. This happened because terraform is declarative. It sees these versioning features which are not in the tf file and therefore deletes these to make the infrastructure match the code. 
+
+## Solution
 The solution to this would be to have each branch correspond to an actual isolated environment.
 
 It is even questionable whether you would want an environment per branch due to the large costs associated with environment creation. If you are working as part of a large team on a large environment, multiple environments will get very expensive very quickly. An alternative approach would be for long running trunk branches to have environments created for them and feature branches to work off these.
