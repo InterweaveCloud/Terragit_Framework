@@ -122,7 +122,7 @@ jobs:
             })
         
       - name: Terraform Destroy
-        if: github.event_name == 'delete' && true
+        if: github.event_name == 'delete' && ${{ startsWith(github.event.ref, 'ex3') }}
         id: terraform-destroy
         run: |
           echo "terraform destroy will be executed"
