@@ -17,6 +17,8 @@ jobs:
       - run: echo ${{startsWith(github.event.ref, 'ex3')}}
       - run: echo ${{ github.event.ref }}
       - run: printenv
+      - name: Display event meta data- for debugging
+        run: cat /home/runner/work/_temp/_github_workflow/event.json
 
   create-infra:
     name: Terraform Workflow
