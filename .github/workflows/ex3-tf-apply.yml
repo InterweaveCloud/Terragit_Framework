@@ -11,7 +11,7 @@ on:
       - 'ex3**'
 jobs:
   show-logic:
-    name: Terraform Apply
+    name: show logic
     runs-on: ubuntu-latest
     steps:
       - run: echo ${{startsWith(github.event.ref, 'ex3')}}
