@@ -14,7 +14,7 @@ jobs:
     name: show logic
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{startsWith(github.event.ref, 'ex3') || startsWith($GITHUB_REF_NAME, 'ex3')}}
+      - run: echo ${{startsWith(github.event.ref, 'ex3')}}
       - run: echo ${{ github.event.ref }}
       - run: printenv
 
