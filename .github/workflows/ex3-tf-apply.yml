@@ -10,19 +10,10 @@ on:
     branches:
       - 'ex3**'
 jobs:
-  show-logic:
-    name: show logic
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo ${{contains(github.event.ref, 'ex3')}}
-      - run: echo ${{ github.event.ref }}
-      - run: printenv
-      - name: Display event meta data- for debugging
-        run: cat /home/runner/work/_temp/_github_workflow/event.json
 
   create-infra:
     name: Terraform Workflow
-    if: startsWith(github.event.ref, 'ex3')
+    if: contains(github.event.ref, 'ex3')
     runs-on: ubuntu-latest
     defaults:
       run:
