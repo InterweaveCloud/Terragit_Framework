@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo ${{startsWith(github.event.ref, 'ex3')}}
+      - run: echo ${{ github.event.ref }}
 
   create-infra:
     name: Terraform Workflow
