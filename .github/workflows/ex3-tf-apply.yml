@@ -16,6 +16,7 @@ jobs:
     steps:
       - run: echo ${{startsWith(github.event.ref, 'ex3')}}
       - run: echo ${{ github.event.ref }}
+      - run: printenv
 
   create-infra:
     name: Terraform Workflow
