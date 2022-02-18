@@ -10,6 +10,12 @@ on:
     branches:
       - 'ex3**'
 jobs:
+  show-logic:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{startsWith(github.event.ref, 'ex3')}}
+
   create-infra:
     name: Terraform Apply
     if: startsWith(github.event.ref, 'ex3')
