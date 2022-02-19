@@ -36,3 +36,11 @@ From this, it is clear that branches now each have their own environment. Key to
 Looking at variables.tf you can see the branch variable is detected from the environment. Within main.tf you can see var.branch is used within the s3 bucket name as this is a global namespace shared across users.
 
 Within the support_scripts/set-branch-env-var.sh, you can see the TF_VAR_branch is set to the branch name. Additionally, it grabs this information from different sources of the github event, adapting to where the information is (if it is a pull, merge, delete event etc).
+
+Create a pull request for each branch to be merged into ex3-guide.
+
+Notice how in each pull request a plan is generated and added to the comments. This plan is taken from the perspective of the target branch and will actually show what is would actually be executed if the pull request was merged.
+
+Once each is merged in, you will notice a workflow is triggered which creates the infrastructure
+
+Delete the branches once complete. Once each branch is deleted, another workflow is triggered which deletes the infrastructure.

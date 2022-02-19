@@ -10,26 +10,7 @@ on:
     branches:
       - 'ex3**'
 jobs:
-
-  check-vars:
-    name: Check vars
-    runs-on: ubuntu-latest
-    if: ${{ (contains(github.event.ref, 'ex3')) || (contains(github.base_ref, 'ex3'))}}
-    
-    # if: ${{ (contains(github.event.ref, 'ex3')) || (contains(github.event.base.ref, 'ex3'))}}
-    env:
-      GH_EVENT_REF: ${{ github.event.ref }}
-      GH_BASE_EVENT_REF: ${{ github.base_ref }}
-
-    steps:
-      - run: printenv
-      - run: cat /home/runner/work/_temp/_github_workflow/event.json
-      - run: echo "github event ref is ${GH_EVENT_REF}"
-      - run: echo "github event ref is ${GH_BASE_EVENT_REF}"
-
-
-
-  create-infra:
+  terraform_workflow:
     name: Terraform Workflow
     if: ${{ (contains(github.event.ref, 'ex3')) || (contains(github.base_ref, 'ex3'))}}
     runs-on: ubuntu-latest
