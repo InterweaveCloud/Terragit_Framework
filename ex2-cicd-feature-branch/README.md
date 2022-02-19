@@ -38,3 +38,5 @@ git push origin ex2-main/feature2
 It is recommended this is scripted for consistency.
 
 Repeat the above steps but before pushing feature 2, utilise the above workflow and you will see the noise is reduced.
+
+Remember to create a backend.tf locally and destroy the infrastructure which was created similar to ex1
