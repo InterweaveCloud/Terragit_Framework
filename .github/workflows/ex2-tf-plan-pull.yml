@@ -48,6 +48,8 @@ jobs:
         id: terraform-plan
         run: terraform plan -input=false -out=tfplan -no-color
 
+      - run: echo ${{ steps.terraform-plan.outputs.stdout }}
+
 
       - name: Post plan outputs back to PR for easier approval
         uses: actions/github-script@0.9.0
