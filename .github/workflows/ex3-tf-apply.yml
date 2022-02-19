@@ -14,10 +14,12 @@ jobs:
   check-vars:
     name: Check vars
     runs-on: ubuntu-latest
+    env:
+      GH_EVENT_REF: ${{ github.event.ref }}
     steps:
       - run: printenv
       - run: cat /home/runner/work/_temp/_github_workflow/event.json
-      - run: echo ${{github.event.ref}}
+      - run: echo $GH_EVENT_REF
 
 
   create-infra:
