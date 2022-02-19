@@ -44,7 +44,6 @@ jobs:
 
       # Plan occurs on both push and pull requests
       - name: Terraform Plan on push event
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
         id: terraform-plan
         run: terraform plan -input=false -out=tfplan -no-color
 
