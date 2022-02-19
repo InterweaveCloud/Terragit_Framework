@@ -17,6 +17,7 @@ jobs:
     steps:
       - run: printenv
       - run: cat /home/runner/work/_temp/_github_workflow/event.json
+      - run: echo ${{github.event.ref}}
 
 
   create-infra:
