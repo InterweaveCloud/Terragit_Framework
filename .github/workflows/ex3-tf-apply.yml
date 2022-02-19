@@ -14,7 +14,7 @@ jobs:
   check-vars:
     name: Check vars
     runs-on: ubuntu-latest
-    if: ${{ (contains(github.event.ref, 'ex3'))}}
+    if: ${{ (contains(github.event.ref, 'ex3')) || true}}
     env:
       GH_EVENT_REF: ${{ github.event.ref }}
     steps:
