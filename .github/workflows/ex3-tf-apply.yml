@@ -19,7 +19,7 @@ jobs:
     # if: ${{ (contains(github.event.ref, 'ex3')) || (contains(github.event.base.ref, 'ex3'))}}
     env:
       GH_EVENT_REF: ${{ github.event.ref }}
-      GH_BASE_EVENT_REF: ${{ github.pull_request.base.ref }}
+      GH_BASE_EVENT_REF: ${{ github.base_ref }}
 
     steps:
       - run: printenv
