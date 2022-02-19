@@ -11,6 +11,14 @@ on:
       - 'ex3**'
 jobs:
 
+  check-vars:
+    name: Check vars
+    runs-on: ubuntu-latest
+    steps:
+      - run: printenv
+      - run: cat /home/runner/work/_temp/_github_workflow/event.json
+
+
   create-infra:
     name: Terraform Workflow
     if: contains(github.event.ref, 'ex3')
