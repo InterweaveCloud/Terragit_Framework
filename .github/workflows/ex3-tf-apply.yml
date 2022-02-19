@@ -46,7 +46,7 @@ jobs:
       S3_BACKEND_ENCRYPT: 'true'
 
       GH_EVENT_REF: ${{ github.event.ref }}
-      GH_BASE_EVENT_REF: ${{ github.event }}
+      GH_BASE_EVENT_REF: ${{ github.pullevent.base.ref }}
 
 
 
