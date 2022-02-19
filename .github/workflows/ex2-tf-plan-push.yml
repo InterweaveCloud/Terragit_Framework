@@ -28,11 +28,22 @@ jobs:
       - run: ./support_scripts/generate-backend-tf.sh
       - run: cat backend.tf
 
+      - name: Terraform Format
+        id: terraform-fmt
+        run: terraform fmt -check
+
       
       - name: Terraform Init
+        id: terraform-init 
         run: terraform init
+
+      - name: Terraform Validate
+        id: terraform-validate
+        run: terraform validate -no-color
+
       - name: Terraform Plan
-        run: terraform plan
+        id: terraform-plan
+        run: terraform plan -input=false -out=tfplan -no-color
 
 
 

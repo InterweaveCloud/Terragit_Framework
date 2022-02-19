@@ -29,10 +29,26 @@ jobs:
       - run: cat backend.tf
 
       
+      - name: Terraform Format
+        id: terraform-fmt
+        run: terraform fmt -check
+
+      
       - name: Terraform Init
+        id: terraform-init 
         run: terraform init
-      - name: Terraform Plan
-        run: terraform plan
+
+      - name: Terraform Validate
+        id: terraform-validate
+        run: terraform validate -no-color
+
+      # Plan occurs on both push and pull requests
+      - name: Terraform Plan on push event
+        id: terraform-plan
+        run: terraform plan -input=false -out=tfplan -no-color
+
+      - run: echo "${{ steps.terraform-plan.outputs.stdout }}"
+
 
 
 
