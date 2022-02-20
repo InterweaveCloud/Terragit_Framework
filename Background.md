@@ -48,8 +48,24 @@ It is recommended to use a single backend for all environments with workspaces u
 
 The -backend-config option must used to specify the backend configuration if it is required to be dynamic.
 
-## Automate Terraform with Github Actions Tutorial
+# Terraform Workflows
 
-This tutorial uses a feature branch methodology. Main has a long running environment and terraform plans occur on a pull request. The issues associated with this methodolof are explored in ex2.
+## Hashicorp Workflows
+
+When researching hashicorp workflows two articles draw particular attention.
+
+https://www.hashicorp.com/blog/version-controlled-infrastructure-with-github-and-terraform
+
+https://learn.hashicorp.com/tutorials/terraform/github-actions?in=terraform/automation
+
+This two articles present the same workflow based on a feature branch methodology. Main has a long running environment and terraform plans occur on a pull request.
 
 The methodology also utilises one single workflow with if statements to control what runs based on several variables.
+
+## GitLab CI Workflows
+
+https://about.gitlab.com/topics/gitops/gitlab-enables-infrastructure-as-code/
+
+https://gitlab.com/gitops-demo/infra/templates/blob/master/terraform.gitlab-ci.yml
+
+Looking at the GitLab CI workflows demonstrated, it is clear that the workflow is based on a feature branch methodology. Again only plans are generated on a pull request. Applies and therefore environments only exist on the main branch.
