@@ -69,3 +69,101 @@ https://about.gitlab.com/topics/gitops/gitlab-enables-infrastructure-as-code/
 https://gitlab.com/gitops-demo/infra/templates/blob/master/terraform.gitlab-ci.yml
 
 Looking at the GitLab CI workflows demonstrated, it is clear that the workflow is based on a feature branch methodology. Again only plans are generated on a pull request. Applies and therefore environments only exist on the main branch.
+
+## Feature Branch Methodology Notes
+
+The feature branch methodology while a step in the right direction, does still have some fundamental flaws.
+
+Terraform plans are not as fool proof as terraform applies. IAM permissions very commonly fail on terraform applies due to malformed policies. Additionally, testing on these feature branches is not possible due to no apply, risking large amounts of pull requests being created to test code. This is also a laborious process and development is often an interative process where changes are made and then manual/automated tests run to ensure the code is working as expected.
+
+These methdologies present minimal guidance on how multiple environments can be managed e.g dev, test, prod environments. This is a huge flaw and leaves a large requirement for developers to repeatedly and independently devise solutions to the plethora of complexities and nuances that do arise.
+
+## GruntWork Workflow
+
+Grunt work present a new workflow for managing multiple environments within a CICD workflow. GruntWork is a leading figure within the Terraform ecospace.
+
+https://blog.gruntwork.io/a-comprehensive-guide-to-terraform-b3d32832baca#.b6sun4nkn
+
+https://blog.gruntwork.io/how-to-use-terraform-as-a-team-251bc1104973
+
+We will be looking specifically at their guide on how to use terraform as a team.
+
+It is highlighted how deployment should occur on a CI server as this provides full automation - preventing manual error and ensuring deployment is fast and repeatable. Also it ensures that a consistent enviuronment is always used with the environment itself versioned as code. Finally, it makes it a lot easier to manage permissions for environments and enforce good security practices - dozens of developers no longer need individual permissions.
+
+### Live Repo and Module Repo
+
+It is recommended that a modules repo is used to house the reuseable modules while the live repo is used to call these modules to create the dev,test,prod environments.
+
+### Key Rules
+
+- Only terraform should be used to manage the infrastructure and no out of band tools should be used to make changes like CLI, portal. This maximises the benefit of IAC.
+
+- Each environment should have its own folder, each component should be in its own folder
+
+- Changes to the production environment should only be executed through the main branch.
+
+### Workflow
+
+The workflow here is genuinely explained in a highly convoluted manner and it is not entirely clear whether the following is how it is intended to be used however the current understanding is:
+
+On the main branch a folder per environment exists: Dev, test, prod.
+
+If changes are need to be made to the dev environment, changes are made directly onto the main branch in the dev environment folder. The changes should not be much more than changing module versions and a few variables since the modules will contain the bulk of the changes.
+
+Once this confirmed to be working, the same is done to test and prod all on the main branch.
+
+The idea of not using git branching at all seems absolutely ludicrous and I am not entirely sure if I have misunderstood the article but it does clearly state not to use branches. It appears to have given up on the challenges that git branching poses and opted to betray DRY and use multiple folders.
+
+It does suggest the use of Terragrunt to bypass this issue and minimise the reuse of code. However. While this article presents a huge amount of good advice, my current understanding boggles my mind and I am struggling to analyse the workflow due to this.
+
+Other arguments presented around using multiple folders involve the poor legibility of conditionals to manipulate across environments however there are better ways to adapt the configuration of environments.
+
+I have read this article about a dozen times now start to finish and to this day I am still dumbfounded and hope one day to understand this a lot better and hope that it does not suggest what I believe it suggests.
+
+Terragrunt is proposed as a tool to deal with this MASSIVE scale of duplication however it does not do this very well at all!
+
+" This way, each module in each environment is defined by a single terragrunt.hcl file that solely specifies the Terraform module to deploy and the input variables specific to that environment. This is about as DRY as you can get! "
+
+So basically, for each environment, a separate block of code and variables is required for each module. This does not scale well at all for large numbers of environments.
+
+https://www.codurance.com/publications/2020/04/28/terraform-with-multiple-environments
+
+Solutions like the above use multiple folders and symlink across folders to minimise code reuse.
+
+## Terraform Workspaces
+
+https://getbetterdevops.io/terraform-create-infrastructure-in-multiple-environments/
+
+Utilising terraform workspaces is presented as a good way to manage multiple environments. While the existing information does not provide much information on integration of workspaces with CICD, it does provide good examples of how to manipulate the variables provided to terraform utilising the workspace var.
+
+However, the advice around how to thoroughly manipulate infrastructure between environments is not clear.
+
+## Workflow Conclusion
+
+Overall, there does not seem to be a clear path forward. Solutions seem to fall under two main bands - multiple directories and workspaces. With industry giant gruntwork and other sources advocating for multiple directories, the amount of code repeated is absolutely ridiculous with poor scalability for new environments. From previous experience spinning up new environments as isolated failure domains was common, be it for interfacing with teams allowing them to practice on our up and coming tool in a safe sandbox environment, creating a stable environment for demos, or simply creating an environment just to try some super destructive test features/code on! This betrayal of DRY and lack of scalability makes this structure completely infeasible.
+
+Where automated workflows for Terraform have been presented, these attempt to leverage a feature branch methodology with some band aids, such as terraform applies only on pull requests. However, these fail to specify how multiple environments can be supported and do not really provide a comprehensive framework. This Terragit framework will attempt to overcome these shortcomings and provide a framework that is more scalable and implementing better coding practices.
+
+# Branching
+
+With branching with terraform, the three main camps appear to be advocates for trunk branching only with no feature branching, feature branches which only execute plans or feature environments.
+
+https://blog.zhenkai.xyz/the-best-git-branching-strategy-for-terraform-is-no-branching/
+
+The above article perfectly summarises the problem with feature branches with terraform in the traditional sense and attempts to resolve the issue simply by having no feature branches at all. It does not touch on how environments can be managed between dev, test, prod environments.
+
+The github actions and GitlabCI and terraform enterprise tutorials present a paradigm where plans will only occur on pull requests from feature branches to environment branches. However, being able to do plans only on pulls provides minimal benefit and adds a a lot of overhead to testing any small iterative change.
+
+https://acidtango.com/thelemoncrunch/how-to-deploy-multiple-branches-with-terraform-and-github-actions/
+
+https://hackernoon.com/from-feature-branches-to-feature-environments-with-terraform-10973ycb
+
+The two articles above present a new paradigm of feature branches.
+
+“The advantage of feature branching is that each developer can work on their own feature and be isolated from changes going on elsewhere.” (FeatureBranch)
+
+This allows the use of git again in its most traditional way where each branch including feature branch corresponds to its own isolated failure domain yet again.
+
+At the core of the feature environment is the ability to pick up a variable which detects the branch the environment is on and then sets the correct variables based on the branch.
+
+The key concerns around this really are around cost so dynamic infrastructure across environments will be very important.
