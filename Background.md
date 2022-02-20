@@ -69,3 +69,59 @@ https://about.gitlab.com/topics/gitops/gitlab-enables-infrastructure-as-code/
 https://gitlab.com/gitops-demo/infra/templates/blob/master/terraform.gitlab-ci.yml
 
 Looking at the GitLab CI workflows demonstrated, it is clear that the workflow is based on a feature branch methodology. Again only plans are generated on a pull request. Applies and therefore environments only exist on the main branch.
+
+## Feature Branch Methodology Notes
+
+The feature branch methodology while a step in the right direction, does still have some fundamental flaws.
+
+Terraform plans are not as fool proof as terraform applies. IAM permissions very commonly fail on terraform applies due to malformed policies. Additionally, testing on these feature branches is not possible due to no apply, risking large amounts of pull requests being created to test code. This is also a laborious process and development is often an interative process where changes are made and then manual/automated tests run to ensure the code is working as expected.
+
+These methdologies present minimal guidance on how multiple environments can be managed e.g dev, test, prod environments. This is a huge flaw and leaves a large requirement for developers to repeatedly and independently devise solutions to the plethora of complexities and nuances that do arise.
+
+## GruntWork Workflow
+
+Grunt work present a new workflow for managing multiple environments within a CICD workflow. GruntWork is a leading figure within the Terraform ecospace.
+
+https://blog.gruntwork.io/a-comprehensive-guide-to-terraform-b3d32832baca#.b6sun4nkn
+
+https://blog.gruntwork.io/how-to-use-terraform-as-a-team-251bc1104973
+
+We will be looking specifically at their guide on how to use terraform as a team.
+
+It is highlighted how deployment should occur on a CI server as this provides full automation - preventing manual error and ensuring deployment is fast and repeatable. Also it ensures that a consistent enviuronment is always used with the environment itself versioned as code. Finally, it makes it a lot easier to manage permissions for environments and enforce good security practices - dozens of developers no longer need individual permissions.
+
+### Live Repo and Module Repo
+
+It is recommended that a modules repo is used to house the reuseable modules while the live repo is used to call these modules to create the dev,test,prod environments.
+
+### Key Rules
+
+- Only terraform should be used to manage the infrastructure and no out of band tools should be used to make changes like CLI, portal. This maximises the benefit of IAC.
+
+- Each environment should have its own folder, each component should be in its own folder
+
+- Changes to the production environment should only be executed through the main branch.
+
+### Workflow
+
+The workflow here is genuinely explained in a highly convoluted manner and it is not entirely clear whether the following is how it is intended to be used however the current understanding is:
+
+On the main branch a folder per environment exists: Dev, test, prod.
+
+If changes are need to be made to the dev environment, changes are made directly onto the main branch in the dev environment folder. The changes should not be much more than changing module versions and a few variables since the modules will contain the bulk of the changes.
+
+Once this confirmed to be working, the same is done to test and prod all on the main branch.
+
+The idea of not using git branching at all seems absolutely ludicrous and I am not entirely sure if I have misunderstood the article but it does clearly state not to use branches. It appears to have given up on the challenges that git branching poses and opted to betray DRY and use multiple folders.
+
+It does suggest the use of Terragrunt to bypass this issue and minimise the reuse of code. However. While this article presents a huge amount of good advice, my current understanding boggles my mind and I am struggling to analyse the workflow due to this.
+
+Other arguments presented around using multiple folders involve the poor legibility of conditionals to manipulate across environments however there are better ways to adapt the configuration of environments.
+
+I have read this article about a dozen times now start to finish and to this day I am still dumbfounded and hope one day to understand this a lot better and hope that it does not suggest what I believe it suggests.
+
+Terragrunt is proposed as a tool to deal with this MASSIVE scale of duplication however it does not do this very well at all!
+
+" This way, each module in each environment is defined by a single terragrunt.hcl file that solely specifies the Terraform module to deploy and the input variables specific to that environment. This is about as DRY as you can get! "
+
+So basically, for each environment, a separate block of code and variables is required for each module. This does not scale well at all for large numbers of environments.
