@@ -145,3 +145,25 @@ Overall, there does not seem to be a clear path forward. Solutions seem to fall 
 Where automated workflows for Terraform have been presented, these attempt to leverage a feature branch methodology with some band aids, such as terraform applies only on pull requests. However, these fail to specify how multiple environments can be supported and do not really provide a comprehensive framework. This Terragit framework will attempt to overcome these shortcomings and provide a framework that is more scalable and implementing better coding practices.
 
 # Branching
+
+With branching with terraform, the three main camps appear to be advocates for trunk branching only with no feature branching, feature branches which only execute plans or feature environments.
+
+https://blog.zhenkai.xyz/the-best-git-branching-strategy-for-terraform-is-no-branching/
+
+The above article perfectly summarises the problem with feature branches with terraform in the traditional sense and attempts to resolve the issue simply by having no feature branches at all. It does not touch on how environments can be managed between dev, test, prod environments.
+
+The github actions and GitlabCI and terraform enterprise tutorials present a paradigm where plans will only occur on pull requests from feature branches to environment branches. However, being able to do plans only on pulls provides minimal benefit and adds a a lot of overhead to testing any small iterative change.
+
+https://acidtango.com/thelemoncrunch/how-to-deploy-multiple-branches-with-terraform-and-github-actions/
+
+https://hackernoon.com/from-feature-branches-to-feature-environments-with-terraform-10973ycb
+
+The two articles above present a new paradigm of feature branches.
+
+“The advantage of feature branching is that each developer can work on their own feature and be isolated from changes going on elsewhere.” (FeatureBranch)
+
+This allows the use of git again in its most traditional way where each branch including feature branch corresponds to its own isolated failure domain yet again.
+
+At the core of the feature environment is the ability to pick up a variable which detects the branch the environment is on and then sets the correct variables based on the branch.
+
+The key concerns around this really are around cost so dynamic infrastructure across environments will be very important.
