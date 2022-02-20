@@ -125,3 +125,23 @@ Terragrunt is proposed as a tool to deal with this MASSIVE scale of duplication 
 " This way, each module in each environment is defined by a single terragrunt.hcl file that solely specifies the Terraform module to deploy and the input variables specific to that environment. This is about as DRY as you can get! "
 
 So basically, for each environment, a separate block of code and variables is required for each module. This does not scale well at all for large numbers of environments.
+
+https://www.codurance.com/publications/2020/04/28/terraform-with-multiple-environments
+
+Solutions like the above use multiple folders and symlink across folders to minimise code reuse.
+
+## Terraform Workspaces
+
+https://getbetterdevops.io/terraform-create-infrastructure-in-multiple-environments/
+
+Utilising terraform workspaces is presented as a good way to manage multiple environments. While the existing information does not provide much information on integration of workspaces with CICD, it does provide good examples of how to manipulate the variables provided to terraform utilising the workspace var.
+
+However, the advice around how to thoroughly manipulate infrastructure between environments is not clear.
+
+## Workflow Conclusion
+
+Overall, there does not seem to be a clear path forward. Solutions seem to fall under two main bands - multiple directories and workspaces. With industry giant gruntwork and other sources advocating for multiple directories, the amount of code repeated is absolutely ridiculous with poor scalability for new environments. From previous experience spinning up new environments as isolated failure domains was common, be it for interfacing with teams allowing them to practice on our up and coming tool in a safe sandbox environment, creating a stable environment for demos, or simply creating an environment just to try some super destructive test features/code on! This betrayal of DRY and lack of scalability makes this structure completely infeasible.
+
+Where automated workflows for Terraform have been presented, these attempt to leverage a feature branch methodology with some band aids, such as terraform applies only on pull requests. However, these fail to specify how multiple environments can be supported and do not really provide a comprehensive framework. This Terragit framework will attempt to overcome these shortcomings and provide a framework that is more scalable and implementing better coding practices.
+
+# Branching

@@ -6,7 +6,7 @@ This repository presents a framework for terraform based CI/CD pipelines. Severa
 
 ### Stage 1
 
-Stage 1 explores the high level decision of how to handle environments within the framework.
+Stage 1 explores the high level decision of how to handle environments and branching within the framework.
 
 The following exercises are provided:
 
