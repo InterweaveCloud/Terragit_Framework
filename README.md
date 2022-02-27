@@ -1,12 +1,24 @@
 # Terragit_Framework
 
+## Bacground
+
+Terraform is a very popular tool for Infrastructure as Code, however while the software itself is now mature with several large stable providers, few frameworks and complete guides exist for utilising terraform within the real world. One of the most complete guides is contained within the Terraform Up and Running book however, despite many good practices, the framework defined for collaborating on and automating terraform is believed to be fundamentally flaws.
+
+The Terragit framework will attempt to provide an alternative framework for automating terraform, with a focus on the following:
+
+- DRY - Don't Repeat Yourself
+- Scaleable - The framework can can support very large infrastructure as well as small
+- Reusable - The framework can support various implementations e.g different backends
+- Progressive Complexity - The framework provides a low requirement of overhead work to get started initially and then progressively adds more functionality as the project grows
+- Git - Leverage the full git capabilities to implement traditional, battle tested git workflows
+
 ## Overview
 
 This repository presents a framework for terraform based CI/CD pipelines. Several exercises are provided to demonstrate the decisions made when designing the framework.
 
 ### Stage 1 - Overview
 
-Stage 1 explores the high level decision of how to handle environments and branching within the framework.
+Stage 1 explores the core decision of how to handle environments and branching within the framework.
 
 The following exercises are provided:
 

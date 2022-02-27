@@ -167,3 +167,7 @@ This allows the use of git again in its most traditional way where each branch i
 At the core of the feature environment is the ability to pick up a variable which detects the branch the environment is on and then sets the correct variables based on the branch.
 
 The key concerns around this really are around cost so dynamic infrastructure across environments will be very important.
+
+# Terraform Up ands Running - Second Edition
+
+The aim of this section is to review the Terraform up and running Second Edition book and review how this can be converted into a set of repeatable requirements for the Terragit framework.
