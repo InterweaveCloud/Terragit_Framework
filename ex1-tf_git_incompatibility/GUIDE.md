@@ -8,9 +8,22 @@ Implementing GitOps with Terraform presents unique challenges - the largest of w
 
 In this exercise, this challenge will be addressed first hand.
 
-## Requirements to do this exercise
+## Requirements
 
-To do this exercise you will need an Amazon Web Services account and I would recommend using Visual Studio Code as these steps will be specified to Studio Visual Code. You will also need a GitHub account.
+To do this exercise you will need:
+
+### Accounts
+
+The followings accounts will be required. No/minimals costs should be incurred in either since the infrastructure created will be absorbed into the free tier of the AWS account.
+
+GitHub Account
+AWS Account
+
+### Software
+
+[Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+[Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+[AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 ## Setting the Scenario
 
