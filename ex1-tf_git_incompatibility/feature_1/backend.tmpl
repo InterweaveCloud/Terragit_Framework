@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
     bucket     = "XXX"
-    key        = "XXX"
+    key        = "ex1/terraform.tfstate"
     region     = "XXX"
-    encrypt    = XXX
+    encrypt    = true
     kms_key_id = "XXX"
     profile    = "XXX"
   }

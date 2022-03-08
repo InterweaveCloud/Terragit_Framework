@@ -1,63 +1,91 @@
 # The incompatibility of Git and Terraform
 
-## Introduction
-Git and terraform are not compatible, the reason being that the git paradigm of an isolate environment per branch is not natively supported by Terraform. In this exercise, you will be following a set of step which will help identify the challenges faced and have them explained as well.
+## Introduction - GitOps
 
-## Setting the Scenario
-Before you begin, I would like to make you aware of the scenario that will be simulated in the steps that follow.
+GitOps is an operational framework that takes DevOps best practices used for application development such as version control, collaboration, compliance, and CI/CD tooling, and applies them to infrastructure automation. Gitlab have an excellent [article](https://about.gitlab.com/topics/gitops/) explaining the concept of GitOps.
 
-Yourself and a colleague are to work on features for an S3 bucket. You will be working on feature 1. which adds versioning and lifecycle rules to the S3 bucket. Your colleague will be working on feature 2, which adds server side encryption to the S3 bucket using KMS.
+Implementing GitOps with Terraform presents unique challenges - the largest of which being that branching with terraform codebases does not create isolated failure domains as it does with application development.
 
-## Step 1
-For each folder (main, feature_1 and feature_2) copy Backend.tmpl into a file called backend.tf and replace the variables with your own values.
+In this exercise, this challenge will be addressed first hand.
 
-## Step 2
-Navigate to the main folder in terminal using the `cd` command. You can check which folder you are in using the `ls` command. Once in the main folder run the following commands in the order it is written in:
-```
-terraform init
-terraform apply
-```
+## Prerequisites
 
-The commands will initialize the backend and create the S3 bucket.
+To do this exercise you will need:
 
-Note: For `terraform apply` you will be required to approve the actions
+### Accounts
 
-## Step 3
-In a  new terminal, navigate to the feature_1 folder using the `cd` command. You can check which folder you are in using the `ls` command. Once in the feature_1 folder run the following command:
-```
-terraform apply
-```
+The followings accounts will be required. No/minimals costs should be incurred in either since the infrastructure created will be absorbed into the free tier of the AWS account.
 
-The command will make changes and modify S3 bucket. The changes are it will add lifecycle rules and enable versioning
+- GitHub Account
+- AWS Account
 
-Note: For `terraform apply` you will be required to approve the actions
+### Software
 
-## Step 4
-In a  new terminal, navigate to the feature_2 folder using the `cd` command. You can check which folder you are in using the `ls` command. Once in the feature_2 folder run the following command:
-```
-terraform apply
-```
+- [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
-The command will create a KMS key and make changes and modify the S3 bucket. The changes to the S3 buckets are the lifecycle rules have been destroyed and a server side encryption has been configured.
+### Configuring local credentials
 
-Note: For `terraform apply` you will be required to approve the actions
+It is recommended to configure a local profile just for this exercise using the AWS CLI command below. This is so that secrets are never uploaded to any git repositories.
 
-## Step 5
-Return to the terminal in which you are in feature_1. Once in the correct terminal run the following command:
-```
-terraform apply
-```
+` aws configure --profile PROFILE_NAME`
 
-The command will destroy the KMS key and make changes and modify the S3 bucket. The changes made to the S3 bucket are lifecycle rules have been added and the server side encryption has been destroyed.
+## Collaboration Scenario
 
-Note: For `terraform apply` you will be required to approve the actions
+Imagine yourself and a colleague are both developing the AWS platform for your project. An S3 bucket has already been created via terraform and this has been committed to the git repository. You are now working on feature 1 (create a KMS key) while your colleague is working on feature 2 (create a DynamoDB table).
 
-## Explanation
-As you saw, when you applied feature_1 and then applied feature_2, the changes made by feature_1 would be removed. The same would happen the other way round. This happened because terraform is declarative. It sees these versioning features which are not in the tf file and therefore deletes these to make the infrastructure match the code. 
+## Step 2 - Setting up the backend and provider
+
+In order to collaborate with anyone on terraform infrastructure, a remote backend is always required. We will use S3 as our backend for this exercise.
+
+For each folder (main, feature_1 and feature_2) copy Backend.tmpl into a file called backend.tf.
+
+For the backend block, replace the variables with the correct values from an existing S3 backend. If you do not currently have an existing s3 backend, please follow Appendix 1. :
+
+For the provider block, place in the name of the profile used and the region.
+
+Finally run `terraform init` to initialize the backend.
+
+## Step 3 - Create main infrastructure
+
+Within the terminal navigate to the main folder and run `terraform init`.
+Then also run `terraform apply` and type yes when prompted.
+
+Two resources will be created:
+
+- An s3 bucket in AWS
+- A random_id internalised within Terraform
+
+## Step 4 -Feature 1
+
+Now lets say you are working on feature 1 and you want to create a KMS key.
+
+Within the terminal navigate to the feature_1 folder and notice how it is the same code as main but with your code for your feature.
+
+run `terraform init`.
+Then also run `terraform apply` and type yes when prompted.
+
+You will notice how the KMS key is created without issue.
+
+## Step 5 - Feature 2
+
+Now lets say your colleague is simultaneously working on feature 2 and they want to create a DynamoDB table.
+
+run `terraform apply` and type yes when prompted. You will see `Plan: 1 to add, 0 to change, 1 to destroy.` The dynamodb table will be created but the kms key created will be destroyed.
+
+## Cause of the incompatibility
+
+If you keep switching between applying the two feature folders, you will see that the other feature is destroyed every time. This is because of the declarative nature of Terraform. Since each branch does not contain the other's additional code when terraform apply is run, terraform detects the infrastructure being tracked is not in the code and destroys it to make the state match the code.
 
 ## Solution
-The solution to this would be to have each branch correspond to an actual isolated environment.
 
-It is even questionable whether you would want an environment per branch due to the large costs associated with environment creation. If you are working as part of a large team on a large environment, multiple environments will get very expensive very quickly. An alternative approach would be for long running trunk branches to have environments created for them and feature branches to work off these.
+The solution to this is to have Terraform executed in a shared remote platform - ideally a CICD pipeline. This will ensure the infrastructure is always in sync with the code and allows execution to occur within a stable environment. However, this presents a major issue in how Terraform and the environments it manage should be managed within CICD. Two possible solutions are investigated in ex2 and ex3
 
-Additionally, all executions of Terraform must occur in a central CICD pipeline as this is the only way to ensure that the infrastructure is always in sync with the code. Additionally, it allows the environment to be written as code providing a stable environment.
+# Appendix
+
+## Appendix 1: Creating an S3 Backend.
+
+In order to create the infrastructure for the S3 backend, the [nozaq/terraform-aws-s3-backend](https://github.com/nozaq/terraform-aws-remote-state-s3-backend) terraform module is recommended. Using this allows for the infrastructure to be created following all bet practices quickly and easily.
+
+Use the `terraform show` command to show the outputs after creating the backend and get the correct variables for the s3 backend.
