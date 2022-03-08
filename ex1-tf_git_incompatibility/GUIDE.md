@@ -25,82 +25,29 @@ The followings accounts will be required. No/minimals costs should be incurred i
 - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
-##
+### Configuring local credentials
+
+It is recommended to configure a local profile just for this exercise using the AWS CLI command below. This is so that secrets are never uploaded to any git repositories.
+
+` aws configure --profile PROFILE_NAME`
 
 ## Collaboration Scenario
 
 Imagine yourself and a colleague are both developing the AWS platform for your project. An S3 bucket has already been created via terraform and this has been committed to the git repository. You are now working on feature 1 (create a dynamodb table) while your colleague is working on feature 2 (create a KMS key).
 
-## Step 2 - Setting up a S3 Backend
+## Step 2 - Setting up the backend and provider
 
-For each folder (main, feature_1 and feature_2) copy Backend.tmpl into a file called backend.tf and replace the variables with your own values. If you know how t set up your own S3 backend or already have one configured you can skip the rest of this step and move onto step 3. If you do not know follow this mini tutorial where you will be shown how to make an S3 backend.
+In order to collaborate with anyone on terraform infrastructure, a remote backend is always required. We will use S3 as our backend for this exercise.
 
-First to set up your backend you will need to create your own S3 bucket, so copy and paste the following code and fill in any blanks that are left into a file called backend.tf:
+For each folder (main, feature_1 and feature_2) copy Backend.tmpl into a file called backend.tf.
 
-```
-resource "aws_s3_bucket" ""{
-    bucket = ""
-    lifecycle {
-        prevent_destroy = true
-    }
-    versioning {
-        enabled = true
-    }
-    server_side_encryption_configuration {
-        rule {
-            apply_server_side_encryption_by_default{
-                sse_algorithm = "AES256"
-            }
-        }
-    }
-}
-```
+For the backend block, replace the variables with the correct values from an existing S3 backend. If you do not currently have an existing s3 backend, please follow Appendix 1. :
 
-Then once you have filled in the blanks you will need to set up your DynamoDB table so again, copy and paste the following code and fill in any blanks that are left:
+For the provider block, place in the name of the profile used and the region.
 
-```
-resource "aws_dynamodb_table" ""{
-    name = ""
-    billing_mode = "PAY_PER_REQUEST"
-    hash_key = "LockID"
+Finally run `terraform init` to initialize the backend.
 
-    attribute {
-        name = "LockID"
-        type = "S"
-    }
-}
-```
-
-Once you have the code for the dynamodb table set up, you can begin with setting up you S3 backend. Copy and paste the following code and fill in any of the blanks that are left:
-
-```
-terraform {
-   backend "s3" {
-       bucket = ""
-       key = ""
-       region = ""
-       dynamodb_table = ""
-       kms_key_id = ""
-       encrypt = true
-   }
-}
-```
-
-To clarify what you should be inputting into the backend, for the bucket, you be putting in the name of the bucket which you have just created. For the key, you should be putting a path file to where you want the key to be saved in for example "example/terraform.tfstate". For the region, you should be using a region suitable to your location. For the dynamodb table you should put the name of the dynamodb table you configured earlier.
-
-Then you need to set up your aws provider. Copy and paste the following code and fill in the blanks, using a region suitable to your location.
-
-```
-provider "aws" {
- region  = ""
-}
-```
-
-Now that you have all your code configured, you will need to turn the backend into comments for now. Then open a new terminal and navigate to the folder in which you have saved the file you configured. Remember to save the file with the S3 backend commented out. The run the command `terraform apply`. This will create the S3 bucket and the dynamodb table.
-
-Then uncomment the S3 backend and run the `terraform init` command and the `terraform apply` command. Now your S3 backend will be initialised.
-
-## Step 3
+## Step 3 - Create main infrastructure
 
 Navigate to the main folder in terminal using the `cd` command. You can check which folder you are in using the `ls` command. Once in the main folder run the following commands in the order it is written in:
 
@@ -554,3 +501,11 @@ The solution to this would be to have each branch correspond to an actual isolat
 It is even questionable whether you would want an environment per branch due to the large costs associated with environment creation. If you are working as part of a large team on a large environment, multiple environments will get very expensive very quickly. An alternative approach would be for long running trunk branches to have environments created for them and feature branches to work off these.
 
 Additionally, all executions of Terraform must occur in a central CICD pipeline as this is the only way to ensure that the infrastructure is always in sync with the code. Additionally, it allows the environment to be written as code providing a stable environment.
+
+# Appendix
+
+## Appendix 1: Creating an S3 Backend.
+
+In order to create the infrastructure for the S3 backend, the [nozaq/terraform-aws-s3-backend](https://github.com/nozaq/terraform-aws-remote-state-s3-backend) terraform module is recommended. Using this allows for the infrastructure to be created following all bet practices quickly and easily.
+
+Use the `terraform show` command to show the outputs after creating the backend and get the correct variables for the s3 backend.
